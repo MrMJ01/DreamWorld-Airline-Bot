@@ -1,0 +1,14 @@
+{
+  "name": "dreamworld-airline-bot",
+  "version": "1.0.0",
+  "description": "DreamWorld Airline Discord Bot",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.16.3",
+    "dotenv": "^16.4.5",
+    "sqlite3": "^5.1.7"
+  }
+}
