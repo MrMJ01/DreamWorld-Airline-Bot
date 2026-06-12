@@ -12,14 +12,14 @@ const client = new Client({
 });
 
 client.once(Events.ClientReady, () => {
-  console.log(`✅ ${client.user.tag} is online!`);
+  console.log(`✈️ DreamWorld Airline Bot is Online!`);
 });
 
 client.on(Events.InteractionCreate, async interaction => {
   if (!interaction.isChatInputCommand()) return;
 
   if (interaction.commandName === "ping") {
-    await interaction.reply("🏢 DreamWorld Airline is Online! ✈️");
+    await interaction.reply("🏢 DreamWorld Airline Bot is Online!");
   }
 });
 
