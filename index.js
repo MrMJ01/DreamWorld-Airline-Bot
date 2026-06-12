@@ -48,10 +48,15 @@ client.on(Events.InteractionCreate, async interaction => {
 1M ➜ 120k ₽`
         },
         {
-          name: "👑 CEO Information",
-          value:
-"DreamWorld Airline receives **30%** of pilot earnings. Bonus is paid from that revenue."
-        }
+  name: "📌 Bonus Rules",
+  value:
+`✔️ Valid earning proof is required.
+✔️ Fake proof = No bonus.
+✔️ Bonus amounts may change during events.
+✔️ DreamWorld Airline reserves the right to update bonus rules anytime.
+
+✈️ Fly Smart • Earn More • Stay Loyal`
+}
       )
       .setFooter({
         text: "DreamWorld Airline • Fly More, Earn More ✈️"
