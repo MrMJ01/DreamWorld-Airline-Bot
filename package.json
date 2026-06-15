@@ -1,13 +1,14 @@
 {
-  "name": "dreamworld-airline-bot",
-  "version": "1.0.0",
-  "description": "DreamWorld Airline Discord Bot",
+  "name": "mirzapur-airline-bot",
+  "version": "2.0.0",
+  "description": "Mirzapur Airline Management Bot",
   "main": "index.js",
   "scripts": {
-    "start": "node deploy-commands.js && node index.js"
+    "start": "node index.js",
+    "deploy": "node deploy-commands.js"
   },
   "dependencies": {
-    "discord.js": "^14.16.3",
-    "dotenv": "^16.4.7"
+    "discord.js": "^14.21.0",
+    "dotenv": "^16.4.5"
   }
 }
