@@ -1,107 +1,68 @@
 require("dotenv").config();
 
 const {
-  Client,
-  GatewayIntentBits,
-  Events,
-  EmbedBuilder
+Client,
+GatewayIntentBits,
+Collection
 } = require("discord.js");
 
-const OWNER_ID = "719815544207048795";
+const fs = require("fs");
 
 const client = new Client({
-  intents: [GatewayIntentBits.Guilds]
+intents:[GatewayIntentBits.Guilds]
 });
 
-client.once(Events.ClientReady, () => {
-  console.log(`✈️ ${client.user.tag} is Online!`);
-});
+client.commands=new Collection();
 
-client.on(Events.InteractionCreate, async interaction => {
+const commandFiles=fs.readdirSync("./commands").filter(file=>file.endsWith(".js"));
 
-  if (!interaction.isChatInputCommand()) return;
+for(const file of commandFiles){
 
-  // BONUS COMMAND
-  if (interaction.commandName === "bonus") {
+const command=require(`./commands/${file}`);
 
-    const embed = new EmbedBuilder()
-      .setColor("#0099ff")
-      .setTitle("✈️ DreamWorld Airline Bonus System")
-      .setDescription("**Live Russia • Babylon Server**")
-      .addFields(
-        {
-          name: "💰 Daily Bonus",
-          value:
-`30,000 ₽ ➜ 2,000 ₽
-40,000 ₽ ➜ 3,000 ₽
-50,000 ₽ ➜ 5,000 ₽
-60,000 ₽ ➜ 6,500 ₽
-70,000 ₽ ➜ 8,000 ₽
-80,000 ₽ ➜ 9,500 ₽
-100,000 ₽ ➜ 12,000 ₽`
-        },
-        {
-          name: "🏆 Weekly Bonus",
-          value:
-`250k ➜ 20k ₽
-500k ➜ 50k ₽
-1M ➜ 120k ₽`
-        },
-        {
-  name: "📌 Bonus Rules",
-  value:
-`✔️ Valid earning proof is required.
-✔️ Fake proof = No bonus.
-✔️ Bonus amounts may change during events.
-✔️ DreamWorld Airline reserves the right to update bonus rules anytime.
+client.commands.set(command.data.name,command);
 
-✈️ Fly Smart • Earn More • Stay Loyal`
 }
-      )
-      .setFooter({
-        text: "DreamWorld Airline • Fly More, Earn More ✈️"
-      });
 
-    return interaction.reply({ embeds: [embed] });
-  }
+client.once("ready",()=>{
 
-  // BONUS START
-  if (interaction.commandName === "p") {
+console.log(`✅ ${client.user.tag} Online`);
 
-    if (interaction.user.id !== OWNER_ID)
-      return interaction.reply({
-        content: "❌ Only DreamWorld Airline CEO can use this command.",
-        ephemeral: true
-      });
+});
 
-    const embed = new EmbedBuilder()
-      .setColor("Green")
-      .setTitle("🟢 BONUS STARTED")
-      .setDescription(
-        "💰 Bonus distribution has started!\n\nPilots can now submit their earning proof and claim today's bonus.\n\n✈️ DreamWorld Airline"
-      );
+client.on("interactionCreate",async interaction=>{
 
-    return interaction.reply({ embeds: [embed] });
-  }
+if(!interaction.isChatInputCommand()) return;
 
-  // BONUS END
-  if (interaction.commandName === "e") {
+const command=client.commands.get(interaction.commandName);
 
-    if (interaction.user.id !== OWNER_ID)
-      return interaction.reply({
-        content: "❌ Only DreamWorld Airline CEO can use this command.",
-        ephemeral: true
-      });
+if(!command) return;
 
-    const embed = new EmbedBuilder()
-      .setColor("Red")
-      .setTitle("🔴 BONUS CLOSED")
-      .setDescription(
-        "Bonus distribution has ended.\n\nThank you to all DreamWorld Airline pilots.\n\nSee you in the next bonus event! ✈️"
-      );
+try{
 
-    return interaction.reply({ embeds: [embed] });
-  }
+await command.execute(interaction);
+
+}catch(err){
+
+console.error(err);
+
+if(interaction.replied){
+
+interaction.followUp({
+content:"❌ Error",
+ephemeral:true
+});
+
+}else{
+
+interaction.reply({
+content:"❌ Error",
+ephemeral:true
+});
+
+}
+
+}
 
 });
 
